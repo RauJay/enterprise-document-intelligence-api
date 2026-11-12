@@ -1,0 +1,6 @@
+Requester: Alex Morgan
+Department: Finance
+Resource: Invoice System
+Access: Read-only
+Duration: 30 days
+Business Justification: Need to review invoices for the quarterly audit.

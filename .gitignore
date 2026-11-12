@@ -1,0 +1,22 @@
+# Python environment
+.venv/
+__pycache__/
+*.py[cod]
+
+# Environment variables and secrets
+.env
+.env.*
+
+# Testing
+.pytest_cache/
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+
+# Generated files
+*.egg-info/
+dist/
+build/

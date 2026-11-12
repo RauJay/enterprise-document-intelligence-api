@@ -1,0 +1,6 @@
+Requester: Taylor Kim
+Department:
+Resource: Reporting Dashboard
+Access: Read-only
+Duration: 14 days
+Business Justification: Need access to prepare the monthly report.
