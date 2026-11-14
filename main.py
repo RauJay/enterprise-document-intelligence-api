@@ -27,7 +27,7 @@ def parse_document(file_name, logger):
             if separator and key and key not in field_tracker:
                 keyVal[key.strip().lower()] =  value.strip() or ""
                 field_tracker.add(key.strip())
-            elif key in field_tracker:
+            elif separator and key and key.strip().lower() in field_tracker:
                 logger.warning(file_name, count, duplicate=True)
             elif line.strip():
                 logger.warning(document_filename=file_name, line_number=count)           
@@ -58,19 +58,12 @@ def validate_document_fields(document):
 
 
 logger = FileLogger("warnings.log")
-documents = {}
-for file_path in Path("documents").glob("*.txt"):
-    doc_key = str(file_path).split("\\")[1]
-    documents[doc_key] = parse_document(str(file_path), logger)
-    #print(f"{file_path.name}, {documents[doc_key]}\n")
-    #print(f"{validate_document_fields(documents[doc_key])}\n")
-
-document_list: list = list(documents.keys())
-
-print("Documents processed:")
-for document in document_list:
-    print(document)
-
+documents = []
+for file_path in Path("documents").glob("*.txt"):    
+    document = parse_document(str(file_path), logger)
+    print(f"{file_path.name}, {document}\n")
+    print(f"{validate_document_fields(document)}\n")
+    documents.append(document)
 
 # print(get_field("Requester", access_request))
 # print(get_field("Unknown", access_request))

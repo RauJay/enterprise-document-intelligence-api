@@ -22,7 +22,9 @@ class FileLogger(Logger):
     def warning(self, document_filename, line_number, duplicate=False):
         if duplicate:
             self.logger.warning("Duplicate key at %s in %s", line_number, document_filename)
-        self.logger.warning("Line %s is malformed in %s", line_number, document_filename)
+        else:
+            self.logger.warning("Line %s is malformed in %s", line_number, document_filename)
+            
         
 
     
