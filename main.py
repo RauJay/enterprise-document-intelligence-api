@@ -59,18 +59,22 @@ def validate_document_fields(document):
 
 def read_document_file(file_path):
     try:
-        content = file_path.read_text(encoding="utf-8").strip()
+        content = file_path.read_text(encoding="utf-8")
         return content
     except (OSError, UnicodeError) as exc:
-        raise DocumentReadError(f"Could not read document '{file_path}': exc")  \
+        raise DocumentReadError(f"Could not read document '{file_path}': {exc}")  \
         from exc
 
 
 logger = FileLogger("warnings.log")
 documents = []
 for file_path in Path("documents").glob("*.txt"):
-    content = read_document_file(file_path)
-
+    try:
+        content = read_document_file(file_path)
+    except DocumentReadError as ex:
+        print(f"{ex} was rasied while processing {file_path.name}")
+        continue
+    
     document = parse_document(content.split("\n"), file_path.name, logger)
     print(f"{file_path.name}, {document}\n")
     print(f"{validate_document_fields(document)}\n")
