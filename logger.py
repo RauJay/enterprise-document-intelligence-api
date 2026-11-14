@@ -19,5 +19,10 @@ class FileLogger(Logger):
            handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
            self.logger.addHandler(handler)
 
-    def warning(self, document_filename, line_number):
+    def warning(self, document_filename, line_number, duplicate=False):
+        if duplicate:
+            self.logger.warning("Duplicate key at %s in %s", line_number, document_filename)
         self.logger.warning("Line %s is malformed in %s", line_number, document_filename)
+        
+
+    

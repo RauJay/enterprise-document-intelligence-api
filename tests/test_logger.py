@@ -46,3 +46,7 @@ class FileLoggerTests(unittest.TestCase):
         self.assertIn("first_file.txt", first_path.read_text(encoding="utf-8"))
         self.assertIn("second_file.txt", first_path.read_text(encoding="utf-8"))
         self.assertFalse(second_path.exists())
+
+
+if __name__ == "__main__":
+    unittest.main()
