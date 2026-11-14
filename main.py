@@ -23,11 +23,11 @@ def parse_document(file_name, logger):
             # divider symbol which aids in condition below unlike split
             # where it's not retained
             key, separator,value = line.partition(":")
-            key = key.strip()
+            key = key.strip().lower()
             if separator and key and key not in field_tracker:
-                keyVal[key.strip().lower()] =  value.strip() or ""
-                field_tracker.add(key.strip())
-            elif separator and key and key.strip().lower() in field_tracker:
+                keyVal[key] =  value.strip() or ""
+                field_tracker.add(key)
+            elif separator and key and key in field_tracker:
                 logger.warning(file_name, count, duplicate=True)
             elif line.strip():
                 logger.warning(document_filename=file_name, line_number=count)           
