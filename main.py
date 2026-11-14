@@ -1,5 +1,6 @@
 from logger import FileLogger
 from pathlib import Path
+from errors import DocumentReadError
 
 REQUIRED_FIELDS = [
     "requester",
@@ -56,21 +57,25 @@ def validate_document_fields(document):
     return "Document is complete"
 
 
+def read_document_file(file_path):
+    try:
+        content = file_path.read_text(encoding="utf-8").strip()
+        return content
+    except (OSError, UnicodeError) as exc:
+        raise DocumentReadError(f"Could not read document '{file_path}': exc")  \
+        from exc
+
+
 logger = FileLogger("warnings.log")
 documents = []
 for file_path in Path("documents").glob("*.txt"):
-    if not file_path.exists():
-        print(f"{file_path.name} doesn't exist")
-        continue
-    content = file_path.read_text()
-    content = content.strip()
-    if content:
-        document = parse_document(content.split("\n"), file_path.name, logger)
-        print(f"{file_path.name}, {document}\n")
-        print(f"{validate_document_fields(document)}\n")
-        documents.append(document)
-    else:
-        print(f"{file_path.name} is empty")
+    content = read_document_file(file_path)
+
+    document = parse_document(content.split("\n"), file_path.name, logger)
+    print(f"{file_path.name}, {document}\n")
+    print(f"{validate_document_fields(document)}\n")
+    documents.append(document)
+  
 
 # print(get_field("Requester", access_request))
 # print(get_field("Unknown", access_request))
