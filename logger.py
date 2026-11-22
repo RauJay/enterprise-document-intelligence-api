@@ -8,7 +8,7 @@ class Logger(ABC):
 
 class FileLogger(Logger):
     def __init__(self, log_filename):
-       self.logger = logging.getLogger(log_filename.split(".")[0])
+       self.logger = logging.getLogger(log_filename)
        self.logger.setLevel(logging.WARNING)
        self.logger.propagate = False
 
