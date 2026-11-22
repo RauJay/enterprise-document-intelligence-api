@@ -35,6 +35,25 @@ class FileLoggerTests(unittest.TestCase):
         self.assertIn("first_file.txt", first_path.read_text(encoding="utf-8"))
         self.assertIn("second_file.txt", second_path.read_text(encoding="utf-8"))
 
+    def test_two_files_with_same_first_name_write_to_different_file(self):
+        first_path = Path(self.temp_dir.name) / "report.v1.log"
+        second_path = Path(self.temp_dir.name) / "report.v2.log"
+
+        first_logger = FileLogger(str(first_path))
+        self.addCleanup(self._close_handlers, first_logger.logger)
+
+        second_logger = FileLogger(str(second_path))
+        self.addCleanup(self._close_handlers, second_logger.logger)
+
+        first_logger.warning("first_file.txt", 1)
+        second_logger.warning(document_filename="second_file.txt", line_number=2)
+        
+        self.assertNotIn("second_file.txt", first_path.read_text(encoding="utf-8"))
+        self.assertNotIn("first_file.txt",  second_path.read_text(encoding="utf-8"))
+        
+        self.assertIn("first_file.txt", first_path.read_text(encoding="utf-8"))
+        self.assertIn("second_file.txt", second_path.read_text(encoding="utf-8"))
+
 
 if __name__ == "__main__":
     unittest.main()
