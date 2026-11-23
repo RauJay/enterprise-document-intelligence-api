@@ -1,6 +1,14 @@
 from errors import DocumentReadError
 from pathlib import Path
 
+REQUIRED_FIELDS = [
+    "requester",
+    "department",
+    "resource",
+    "access",
+    "duration",
+    "business justification"]
+
 def read_document_file(file_path):
     try:
         content = file_path.read_text(encoding="utf-8")
@@ -16,7 +24,7 @@ def get_contents_for_files(dir_path):
             content = read_document_file(file_path)
             contents_dic[file_path.name] = content
         except DocumentReadError as ex:
-            print(f"{ex} was rasied while processing {file_path.name}")
+            print(f"{ex} was raised while processing {file_path.name}")
             continue
     return contents_dic
 
@@ -43,3 +51,21 @@ def parse_document(content, file_name, logger):
             logger.warning(document_filename=file_name, line_number=count)
 
     return keyVal
+
+def validate_document_fields(document):
+    missing_fields = [
+       field for field in REQUIRED_FIELDS
+       if field not in document
+    ]
+
+    if missing_fields:
+        return f"Fields {", ".join(missing_fields)} are missing"
+    missing_details = [
+        field for field in REQUIRED_FIELDS
+        if not document[field].strip()
+    ]
+
+    if missing_details:
+        return f"Field details for {", ".join(missing_details)} are missing"
+
+    return "Document is complete"

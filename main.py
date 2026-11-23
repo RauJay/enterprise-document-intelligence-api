@@ -1,35 +1,8 @@
 from logger import FileLogger
-from document_parser import parse_document, get_contents_for_files
+from document_parser import parse_document, get_contents_for_files, validate_document_fields
 
-REQUIRED_FIELDS = [
-    "requester",
-    "department",
-    "resource",
-    "access",
-    "duration",
-    "business justification"]
-
-def get_field(key, look_up):
-    return look_up.get(key.lower())
-
-def validate_document_fields(document):
-    missing_fields = [
-       field for field in REQUIRED_FIELDS
-       if field not in document
-    ]
-
-    if missing_fields:
-        return f"Fields {", ".join(missing_fields)} are missing"
-    missing_details = [
-        field for field in REQUIRED_FIELDS
-        if not document[field].strip()
-    ]
-
-    if missing_details:
-        return f"Field details for {", ".join(missing_details)} are missing"
-
-    return "Document is complete"
-
+# def get_field(key, look_up):
+#     return look_up.get(key.lower())
 
 def main():
     logger = FileLogger("warnings.log")
