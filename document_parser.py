@@ -1,7 +1,8 @@
 from errors import DocumentReadError
 from pathlib import Path
+from logger import Logger
 
-REQUIRED_FIELDS = [
+REQUIRED_FIELDS : list[str] = [
     "requester",
     "department",
     "resource",
@@ -9,7 +10,7 @@ REQUIRED_FIELDS = [
     "duration",
     "business justification"]
 
-def read_document_file(file_path):
+def read_document_file(file_path : Path) -> str:
     try:
         content = file_path.read_text(encoding="utf-8")
         return content
@@ -17,7 +18,7 @@ def read_document_file(file_path):
         raise DocumentReadError(f"Could not read document '{file_path}': {exc}")  \
         from exc
 
-def get_contents_for_files(dir_path):
+def get_contents_for_files(dir_path: Path) -> dict[str, str]:
     contents_dic = {}
     for file_path in Path(dir_path).glob("*.txt"):
         try:
@@ -28,7 +29,7 @@ def get_contents_for_files(dir_path):
             continue
     return contents_dic
 
-def parse_document(content, file_name, logger):
+def parse_document(content: list[str], file_name: str, logger: Logger) -> dict[str, str]:
     keyVal = {}
     # Set used to track duplicates
     # In this case it could be avoided by using key not in keyVal
@@ -52,7 +53,7 @@ def parse_document(content, file_name, logger):
 
     return keyVal
 
-def validate_document_fields(document):
+def validate_document_fields(document : dict[str, str]) -> str:
     missing_fields = [
        field for field in REQUIRED_FIELDS
        if field not in document
